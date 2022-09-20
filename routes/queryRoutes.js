@@ -11,13 +11,13 @@ const storage = multer.diskStorage({
     cb(null, "public/uploads");
   },
   filename: function (req, file, cb) {
-    cb(null, Date.now() + "-" + file.imageURL);
+    cb(null, Date.now() + "-" + file.originalname);
   },
 });
 
 const upload = multer({ storage: storage });
 
-router.post("/create", upload.single("image"), async (req, res) => {
+router.post("/create", upload.single("imageURL"), async (req, res) => {
   console.log(req.body);
   const { userId, quizId, queryType, pointsType, question, answerIndex, answers, timer, imageURL } = req.body;
   if ((!userId, !quizId, !queryType || (!pointsType && pointsType !== 0) || !question || (!answerIndex && answerIndex !== 0) || !answers || !timer))
@@ -31,7 +31,11 @@ router.post("/create", upload.single("image"), async (req, res) => {
   const foundQuiz = await QuizModel.findById(quizId);
   if (!foundQuiz) return res.status(404).send("Quiz does not exist");
 
-  if (req.file) console.log("REQ.FILE:", req.file);
+  let imageUrl = false;
+  if (req.file) {
+    console.log("REQ.FILE:", req.file);
+    imageUrl = "/uploads/" + req.file.filename;
+  }
 
   const newQuery = new QueryModel({
     creatorId: userId,
@@ -42,7 +46,7 @@ router.post("/create", upload.single("image"), async (req, res) => {
     answerIndex,
     answers,
     timer,
-    imageURL,
+    imageURL: imageUrl,
   });
 
   try {
@@ -73,6 +77,11 @@ router.post("/edit", upload.single("image"), async (req, res) => {
 
   if (foundQuery.creatorId.toString() !== userId) return res.status(400).send("User is not creator");
 
+  let image = false;
+  if (req.file) {
+    image = "/uploads/" + req.file.filename;
+  }
+
   if (queryType) {
     foundQuery.queryType = queryType;
   } else if (pointsType) {
@@ -88,7 +97,8 @@ router.post("/edit", upload.single("image"), async (req, res) => {
   } else if (imageURL) {
     foundQuery.imageURL = imageURL;
   } else if (req.file) {
-    // foundQuery.imageURL = imageURL;
+    console.log(req.file);
+    foundQuery.imageURL = image;
   }
 
   try {

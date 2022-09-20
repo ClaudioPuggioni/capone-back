@@ -136,6 +136,21 @@ Estimated time: 5hrs
 
     19 Sept'22
     08:10 - 17:25: Complete communication between server, teacher, and students, and user interface.
+    17:25 - 19:00: Continued work on socket logic for timer and teacher's during-quiz answers table.
+    20:25 - 21:45: Fleshing out actual table and adding end of question logic for question progression.
+    --------------
+
+Part 1 completed in around 0 hours 00mins.
+
+## Milestone 12
+
+Estimated time: 5hrs
+
+### Part 1 - Complete socket communication logic
+
+    19 Sept'22
+    22:45 - 03:40: Tabulate student answers for teacher. Fix buttons within buttons. Question progression.
+    03:40 - 00:00: Question progression.
     --------------
 
 Part 1 completed in around 0 hours 00mins.
